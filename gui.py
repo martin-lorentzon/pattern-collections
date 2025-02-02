@@ -9,7 +9,7 @@ from . import sorting_functions
 
 class BaseItemUIList(bpy.types.UIList):
     """
-    List UI for including or excluding sorting-categories that don't need anything special.
+    List Item UI for sorting categories that don't need anything special.
     """
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         pcoll = icons.preview_collections["main"]
@@ -37,7 +37,7 @@ class BaseItemUIList(bpy.types.UIList):
 
 class AttributeItemUIList(bpy.types.UIList):
     """
-    List UI for attribute sorting-categories that make use of the additional 'value' and 'GREATER_THAN'/'LESS_THAN' properties.
+    List Item UI for attribute-sorting categories that make use of the additional 'value' and 'GREATER_THAN'/'LESS_THAN' properties.
     """
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         pcoll = icons.preview_collections["main"]
@@ -66,9 +66,9 @@ class AttributeItemUIList(bpy.types.UIList):
             layout.alignment = "CENTER"
 
 
-class PatternCollectionPanel:
+class PatternCollectionsPanel:
     """
-    Variables and methods all pattern collection panels should inherit.
+    Members all pattern collection panels should inherit.
     """
     bl_space_type = "PROPERTIES"
     bl_region_type = "WINDOW"
@@ -80,11 +80,10 @@ class PatternCollectionPanel:
         return collection != context.scene.collection
 
 
-class PATTERN_COLLECTION_PT_pattern_collection(PatternCollectionPanel, bpy.types.Panel):
+class PATTERN_COLLECTIONS_PT_pattern_collection(PatternCollectionsPanel, bpy.types.Panel):
     """
     Main (parent) panel.
     """
-    bl_idname = "PATTERN_COLLECTION_PT_pattern_collection"
     bl_label = "Sorting Pattern"
 
     def draw(self, context):
@@ -93,21 +92,21 @@ class PATTERN_COLLECTION_PT_pattern_collection(PatternCollectionPanel, bpy.types
 
         row = layout.row(align=True)
         if collection.name not in sorting_functions.sorting_timers:
-            row.operator("pattern_collection.register_timer", text="", icon="RADIOBUT_OFF")
+            row.operator("collection.register_timer", text="", icon="RADIOBUT_OFF")
         else:
-            row.operator("pattern_collection.unregister_timer", text="", icon="RADIOBUT_ON", depress=True)
-        row.operator("pattern_collection.sort_collection")
+            row.operator("collection.unregister_timer", text="", icon="RADIOBUT_ON", depress=True)
+        row.operator("collection.sort_collection")
 
         col = layout.column()
-        col.operator("pattern_collection.import_json", text="Import", icon="IMPORT")
-        col.operator("pattern_collection.export_json", text="Export", icon="EXPORT")
+        col.operator("collection.import_pattern", text="Import", icon="IMPORT")
+        col.operator("collection.export_pattern", text="Export", icon="EXPORT")
 
 
-class PATTERN_COLLECTION_PT_uilist(PatternCollectionPanel, bpy.types.Panel):
+class PATTERN_COLLECTIONS_PT_uilist(PatternCollectionsPanel, bpy.types.Panel):
     """
     List panel all sorting category panels should inherit.
     """
-    bl_parent_id = "PATTERN_COLLECTION_PT_pattern_collection"
+    bl_parent_id = "PATTERN_COLLECTIONS_PT_pattern_collection"
     bl_label = ""
     bl_options = {"DEFAULT_CLOSED"}
 
@@ -129,41 +128,45 @@ class PATTERN_COLLECTION_PT_uilist(PatternCollectionPanel, bpy.types.Panel):
         layout = self.layout
 
         row = layout.row(align=False)
-        row.template_list(self.uilist_class, "",
-                          collection.pattern_collection_properties, self.category,
-                          collection.pattern_collection_properties, self.active_index)
+        row.template_list(
+            self.uilist_class, "",
+            collection.pattern_collection_properties, self.category,
+            collection.pattern_collection_properties, self.active_index
+            )
 
         match self.default_name:
             case "context_object":
-                add_name = object.name if object else "Object"
+                new_name = object.name if object else "Object"
             case "context_type":
-                add_name = object.type if object else "MYTYPE"
+                new_name = object.type if object else "MY_TYPE"
             case "context_material":
-                add_name = object.active_material.name if (object and object.active_material) else "Material"
+                new_name = object.active_material.name if (object and object.active_material) else "Material"
             case "context_uv_layer":
-                add_name = object.data.uv_layer_clone.name if object and len(object.data.uv_layers) > 0 else "UVMap"
+                new_name = object.data.uv_layer_clone.name if object and len(object.data.uv_layers) > 0 else "UVMap"
             case _:
-                add_name = self.default_name
+                new_name = self.default_name
+
+        panel_list_operators = []
 
         col = row.column(align=True)
-        op = col.operator("list.add_item", icon="ADD", text="")
-        op.prop = self.category
-        op.name = add_name
-        op = col.operator("list.remove_item", icon="REMOVE", text="")
-        op.prop = self.category
-        op.idx_prop = self.active_index
-        op = col.operator("list.duplicate_item", icon="DUPLICATE", text="")
-        op.prop = self.category
-        op.idx_prop = self.active_index
+        add_op = col.operator("list.add_item", icon="ADD", text="")
+        add_op.new_name = new_name
+        remove_op = col.operator("list.remove_item", icon="REMOVE", text="")
+        duplicate_op = col.operator("list.duplicate_item", icon="DUPLICATE", text="")
+        panel_list_operators.extend([add_op, remove_op, duplicate_op])
 
         is_sortable = len(getattr(collection.pattern_collection_properties, self.category)) >= 2
         if is_sortable:
             col.separator()
-            op = col.operator("list.move_item", icon="TRIA_UP", text="")
-            op.prop = self.category
-            op.idx_prop = self.active_index
-            op.direction = "UP"
-            op = col.operator("list.move_item", icon="TRIA_DOWN", text="")
-            op.prop = self.category
-            op.idx_prop = self.active_index
-            op.direction = "DOWN"
+            up_op = col.operator("list.move_item", icon="TRIA_UP", text="")
+            up_op.direction = "UP"
+            down_op = col.operator("list.move_item", icon="TRIA_DOWN", text="")
+            down_op.direction = "DOWN"
+            panel_list_operators.extend([up_op, down_op])
+
+        for op in panel_list_operators:
+            op.domain = "collection"
+            op.property_group = "pattern_collection_properties"
+            op.property = self.category
+            if hasattr(op, "idx_property"):
+                op.idx_property = self.active_index

@@ -5,8 +5,8 @@ schema_version = "1.0.0"
 id = "pattern_collections"
 version = "1.0.0"
 name = "Pattern Collections"
-tagline = "Sort scene objects by ✨anything✨"
-maintainer = "Martin Lorentzon <martin.lorentzon.work@gmail.com>"
+tagline = "Sort objects by anything with reusable patterns"
+maintainer = "Martin Lorentzon <martin.lorentzon@afry.com>"
 # Supported types: "add-on", "theme"
 type = "add-on"
 
@@ -24,9 +24,7 @@ blender_version_min = "4.2.0"
 
 # License conforming to https://spdx.org/licenses/ (use "SPDX: prefix)
 # https://docs.blender.org/manual/en/dev/advanced/extensions/licenses.html
-license = [
-  "SPDX:GPL-3.0-or-later",
-]
+license = ["SPDX:GPL-3.0-or-later"]
 # # Optional: required by some licenses.
 # copyright = [
 #   "2002-2024 Developer Name",

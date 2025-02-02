@@ -7,8 +7,8 @@ import time
 import json
 
 
-class PATTERN_COLLECTION_OT_sort_collection(bpy.types.Operator):
-    bl_idname = "pattern_collection.sort_collection"
+class PATTERN_COLLECTIONS_OT_sort_collection(bpy.types.Operator):
+    bl_idname = "collection.sort_collection"
     bl_label = "Sort Collection"
     bl_description = "Sort all objects for the active collection"
     bl_options = {"REGISTER", "UNDO"}
@@ -16,13 +16,12 @@ class PATTERN_COLLECTION_OT_sort_collection(bpy.types.Operator):
     def execute(self, context):
         collection = context.collection
         sorting_commands = sorting_functions.sort_objects(collection, bpy.data.objects)
-
         sorting_functions.process_sorting_commands(sorting_commands)
         return {"FINISHED"}
 
 
-class PATTERN_COLLECTION_OT_register_timer(bpy.types.Operator):
-    bl_idname = "pattern_collection.register_timer"
+class PATTERN_COLLECTIONS_OT_register_timer(bpy.types.Operator):
+    bl_idname = "collection.register_timer"
     bl_label = "Register Sort Timer"
     bl_description = "Sort all objects for the active collection at regular intervals\n(WARNING: May cause Blender to momentarily hang for larger scenes)"
 
@@ -59,8 +58,8 @@ class PATTERN_COLLECTION_OT_register_timer(bpy.types.Operator):
         return {"FINISHED"}
 
 
-class PATTERN_COLLECTION_OT_unregister_timer(bpy.types.Operator):
-    bl_idname = "pattern_collection.unregister_timer"
+class PATTERN_COLLECTIONS_OT_unregister_timer(bpy.types.Operator):
+    bl_idname = "collection.unregister_timer"
     bl_label = "Unregister Sort Timer"
     bl_description = "Sort all objects for the active collection at regular intervals\n(WARNING: May cause Blender to momentarily hang for larger scenes)"
 
@@ -77,9 +76,9 @@ class PATTERN_COLLECTION_OT_unregister_timer(bpy.types.Operator):
         return {"FINISHED"}
 
 
-class PATTERN_COLLECTION_OT_export_json(bpy.types.Operator, ExportHelper):
-    bl_idname = "pattern_collection.export_json"
-    bl_label = "Export JSON"
+class PATTERN_COLLECTIONS_OT_export_pattern(bpy.types.Operator, ExportHelper):
+    bl_idname = "collection.export_pattern"
+    bl_label = "Export Pattern"
     bl_description = "Exports a pattern collection config to a JSON file"
 
     filter_glob: bpy.props.StringProperty(default="*.json;", options={"HIDDEN"})
@@ -128,9 +127,9 @@ class PATTERN_COLLECTION_OT_export_json(bpy.types.Operator, ExportHelper):
         return {"FINISHED"}
 
 
-class PATTERN_COLLECTION_OT_import_json(bpy.types.Operator, ImportHelper):
-    bl_idname = "pattern_collection.import_json"
-    bl_label = "Import JSON"
+class PATTERN_COLLECTIONS_OT_import_pattern(bpy.types.Operator, ImportHelper):
+    bl_idname = "collection.import_pattern"
+    bl_label = "Import Pattern"
     bl_description = "Loads a pattern collection config from a JSON file"
     bl_options = {"REGISTER", "UNDO"}
 

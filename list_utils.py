@@ -4,7 +4,7 @@ Generic list operators.
 
 import bpy
 from bpy.types import Operator
-from bpy.props import StringProperty
+from bpy.props import StringProperty, EnumProperty
 from bl_math import clamp
 
 
@@ -65,7 +65,7 @@ class LIST_OT_remove_item(Operator):
         idx_min = 0
         idx_max = len(collection_property) - 1 if collection_property else 0
 
-        setattr(properties, self.idx_property, clamp(index, idx_min, idx_max))
+        setattr(properties, self.idx_property, int(clamp(index, idx_min, idx_max)))
         return {"FINISHED"}
 
 
@@ -103,7 +103,7 @@ class LIST_OT_duplicate_item(Operator):
         idx_min = 0
         idx_max = len(collection_property) - 1 if collection_property else 0
 
-        setattr(properties, self.idx_property, clamp(index, idx_min, idx_max))
+        setattr(properties, self.idx_property, int(clamp(index, idx_min, idx_max)))
         return {"FINISHED"}
 
 
@@ -116,10 +116,10 @@ class LIST_OT_move_item(bpy.types.Operator):
     domain: StringProperty()
     property_group: StringProperty()
 
-    property: bpy.props.StringProperty()
-    idx_property: bpy.props.StringProperty()
+    property: StringProperty()
+    idx_property: StringProperty()
 
-    direction: bpy.props.EnumProperty(
+    direction: EnumProperty(
         items=[("UP", "Up", ""),
                ("DOWN", "Down", "")]
         )
@@ -140,5 +140,5 @@ class LIST_OT_move_item(bpy.types.Operator):
         idx_max = len(collection_property) - 1 if collection_property else 0
 
         collection_property.move(neighbor, index)
-        setattr(properties, self.idx_property, clamp(new_index, idx_min, idx_max))
+        setattr(properties, self.idx_property, int(clamp(new_index, idx_min, idx_max)))
         return {"FINISHED"}
