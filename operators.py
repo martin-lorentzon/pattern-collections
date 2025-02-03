@@ -89,11 +89,14 @@ class PATTERN_COLLECTIONS_OT_export_pattern(Operator, ExportHelper):
     bl_description = "Export sorting pattern to a JSON file"
 
     filter_glob: StringProperty(default="*.json;", options={"HIDDEN"})
-    filename_ext = ".json"
 
     def execute(self, context):
         collection = context.collection
         properties = collection.pattern_collection_properties
+
+        if not self.filepath.endswith(".json"):
+            self.report({"WARNING"}, "Unsupported format")
+            return {"CANCELLED"}
 
         categories = ["included_names",       "excluded_names",
                       "included_hierarchies", "excluded_hierarchies",
