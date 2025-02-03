@@ -56,8 +56,7 @@ class PATTERN_COLLECTIONS_OT_register_timer(Operator):
                 return (interval_seconds)
 
         partial = functools.partial(timer_func, collection.name, addon_prefs.sorting_interval)
-
-        bpy.app.timers.register(partial, addon_prefs.sorting_interval)
+        bpy.app.timers.register(partial, first_interval=addon_prefs.sorting_interval)
         sorting_functions.sorting_timers[collection.name] = partial
 
         utils.redraw_ui()

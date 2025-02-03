@@ -97,9 +97,9 @@ class PATTERN_COLLECTIONS_PT_pattern_collection(PatternCollectionsPanel, bpy.typ
             row.operator("collection.unregister_pattern_sort_timer", text="", icon="RADIOBUT_ON", depress=True)
         row.operator("collection.sort_collection")
 
-        col = layout.column()
-        col.operator("collection.import_pattern", text="Import", icon="IMPORT")
-        col.operator("collection.export_pattern", text="Export", icon="EXPORT")
+        box = layout.box()
+        box.operator("collection.import_pattern", text="Import", icon="IMPORT")
+        box.operator("collection.export_pattern", text="Export", icon="EXPORT")
 
 
 class PATTERN_COLLECTIONS_PT_uilist(PatternCollectionsPanel, bpy.types.Panel):
