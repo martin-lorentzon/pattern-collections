@@ -12,23 +12,25 @@ class PATTERN_COLLECTIONS_Preferences(AddonPreferences):
         subtype="TIME_ABSOLUTE"
     )
     safe_intervals: BoolProperty(
-        name="Safe Sorting Intervals",
-        description="Base the automatic sorting interval on the previous sort time to ensure Blender doesn't lock as frequently (multiplies by 10)",
+        name="Safe Automatic Sorting",
+        description="Base the automatic sorting interval on the previous sort delta to ensure Blender doesn't lock as frequently (multiplies by 10)",
         default=True
     )
     
     def draw(self, context):
         layout = self.layout
-        layout.use_property_split = True
 
         layout.separator(factor=0.1)
 
         row = layout.row()
-        row.label(text="Automatic Sorting Interval", icon="TIME")
+        row.alignment = "LEFT"
+        row.label(text="", icon="TIME")
         row.prop(self, "sorting_interval", text="")
+        row.label(text="Automatic Sorting Interval")
 
         row = layout.row()
-        row.label(text="Safe Sorting Intervals", icon="FAKE_USER_ON")
-        row.prop(self, "safe_intervals", text="")
+        row.alignment = "LEFT"
+        row.label(text="", icon="FAKE_USER_ON")
+        row.prop(self, "safe_intervals")
 
         layout.separator(factor=0.1)

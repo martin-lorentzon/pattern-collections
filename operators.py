@@ -7,6 +7,7 @@ from . import utils
 import functools
 import time
 import json
+import webbrowser
 
 
 def sort_collection(collection):
@@ -26,14 +27,14 @@ class PATTERN_COLLECTIONS_OT_sort_collection(Operator):
     def execute(self, context):
         collection = context.collection
         delta_t = sort_collection(collection)
-        self.report({"INFO"}, f"Finished sorting {delta_t:.4f} in sec")
+        self.report({"INFO"}, f"Finished sorting in {delta_t:.4f} sec")
         return {"FINISHED"}
 
 
 class PATTERN_COLLECTIONS_OT_register_timer(Operator):
     bl_idname = "collection.register_pattern_sort_timer"
     bl_label = "Enable Automatic Sorting"
-    bl_description = "Sort all objects for the active collection at regular intervals\n(WARNING: May cause Blender to momentarily hang for larger scenes)"
+    bl_description = "Sort all objects for the active collection at regular intervals\n(WARNING: May cause Blender to momentarily freeze for larger scenes)"
 
     def execute(self, context):
         preferences = context.preferences
@@ -47,12 +48,12 @@ class PATTERN_COLLECTIONS_OT_register_timer(Operator):
         if addon_prefs.safe_intervals:
             def timer_func(collection_name, interval_seconds):
                 delta_t = sort_collection(bpy.data.collections[collection_name])
-                print(f"Finished sorting {delta_t:.4f} in sec")
+                print(f"Finished sorting in {delta_t:.4f} sec")
                 return max(interval_seconds, delta_t * 10)
         else:
             def timer_func(collection_name, interval_seconds):
                 delta_t = sort_collection(bpy.data.collections[collection_name])
-                print(f"Finished sorting {delta_t:.4f} in sec")
+                print(f"Finished sorting in {delta_t:.4f} sec")
                 return (interval_seconds)
 
         partial = functools.partial(timer_func, collection.name, addon_prefs.sorting_interval)
@@ -66,7 +67,7 @@ class PATTERN_COLLECTIONS_OT_register_timer(Operator):
 class PATTERN_COLLECTIONS_OT_unregister_timer(Operator):
     bl_idname = "collection.unregister_pattern_sort_timer"
     bl_label = "Disable Automatic Sorting"
-    bl_description = "Sort all objects for the active collection at regular intervals\n(WARNING: May cause Blender to momentarily hang for larger scenes)"
+    bl_description = "Sort all objects for the active collection at regular intervals\n(WARNING: May cause Blender to momentarily freeze for larger scenes)"
 
     def execute(self, context):
         collection = context.collection
@@ -85,7 +86,7 @@ class PATTERN_COLLECTIONS_OT_unregister_timer(Operator):
 class PATTERN_COLLECTIONS_OT_export_pattern(Operator, ExportHelper):
     bl_idname = "collection.export_pattern"
     bl_label = "Export Pattern"
-    bl_description = "Exports a pattern collection config to a JSON file"
+    bl_description = "Export a sorting pattern to a JSON file"
 
     filter_glob: StringProperty(default="*.json;", options={"HIDDEN"})
     filename_ext = ".json"
@@ -127,7 +128,7 @@ class PATTERN_COLLECTIONS_OT_export_pattern(Operator, ExportHelper):
 class PATTERN_COLLECTIONS_OT_import_pattern(Operator, ImportHelper):
     bl_idname = "collection.import_pattern"
     bl_label = "Import Pattern"
-    bl_description = "Loads a pattern collection config from a JSON file"
+    bl_description = "Import a sorting pattern from a JSON file"
     bl_options = {"REGISTER", "UNDO"}
 
     filter_glob: StringProperty(
@@ -162,4 +163,41 @@ class PATTERN_COLLECTIONS_OT_import_pattern(Operator, ImportHelper):
 
                 for prop, value in data.items():
                     setattr(item, prop, value)
+        return {"FINISHED"}
+
+
+class PATTERN_COLLECTIONS_OT_open_preferences(Operator):
+    bl_idname = "pattern_collections.open_preferences"
+    bl_description = "Open the add-on preferences"
+    bl_label = "Preferences"
+
+    def execute(self, context):
+        bpy.ops.screen.userpref_show("INVOKE_DEFAULT")
+        bpy.data.window_managers["WinMan"].addon_search = "Pattern Collections"
+        bpy.context.preferences.active_section = "ADDONS"
+        bpy.data.window_managers["WinMan"].addon_support = {
+            "OFFICIAL", "COMMUNITY"
+        }
+        return {"FINISHED"}
+
+
+class PATTERN_COLLECTIONS_OT_open_tracker(Operator):
+    bl_idname = "pattern_collections.open_tracker"
+    bl_description = "Open the issue tracker"
+    bl_label = "Feedback"
+
+    def execute(self, context):
+        url = "https://github.com/martin-lorentzon/blender-pattern-collections/issues"
+        webbrowser.open(url)
+        return {"FINISHED"}
+
+
+class PATTERN_COLLECTIONS_OT_open_documentation(Operator):
+    bl_idname = "pattern_collections.open_documentation"
+    bl_label = "Documentation"
+    bl_description = "Open the documentation"
+
+    def execute(self, context):
+        url = "https://github.com/martin-lorentzon/blender-pattern-collections"
+        webbrowser.open(url)
         return {"FINISHED"}

@@ -1,16 +1,15 @@
 from .. import gui
-import bpy
 
 
-class PATTERN_COLLECTIONS_UL_included_attributes(gui.AttributeItemUIList, bpy.types.UIList):
+class PATTERN_COLLECTIONS_UL_included_attributes(gui.AttributeItemUIList):
     pass
 
 
-class PATTERN_COLLECTIONS_UL_excluded_attributes(gui.AttributeItemUIList, bpy.types.UIList):
+class PATTERN_COLLECTIONS_UL_excluded_attributes(gui.AttributeItemUIList):
     pass
 
 
-class PATTERN_COLLECTIONS_PT_included_attributes(gui.PATTERN_COLLECTIONS_PT_uilist, bpy.types.Panel):
+class PATTERN_COLLECTIONS_PT_included_attributes(gui.PATTERN_COLLECTIONS_PT_uilist):
     custom_label = "Included Attributes"
     uilist_class = "PATTERN_COLLECTIONS_UL_included_attributes"
     category = "included_attributes"
@@ -18,7 +17,7 @@ class PATTERN_COLLECTIONS_PT_included_attributes(gui.PATTERN_COLLECTIONS_PT_uili
     default_name = "Property"
 
 
-class PATTERN_COLLECTIONS_PT_excluded_attributes(gui.PATTERN_COLLECTIONS_PT_uilist, bpy.types.Panel):
+class PATTERN_COLLECTIONS_PT_excluded_attributes(gui.PATTERN_COLLECTIONS_PT_uilist):
     custom_label = "Excluded Attributes"
     uilist_class = "PATTERN_COLLECTIONS_UL_excluded_attributes"
     category = "excluded_attributes"

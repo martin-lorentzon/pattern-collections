@@ -1,16 +1,15 @@
 from .. import gui
-import bpy
 
 
-class PATTERN_COLLECTIONS_UL_included_materials(gui.BaseItemUIList, bpy.types.UIList):
+class PATTERN_COLLECTIONS_UL_included_materials(gui.BaseItemUIList):
     pass
 
 
-class PATTERN_COLLECTIONS_UL_excluded_materials(gui.BaseItemUIList, bpy.types.UIList):
+class PATTERN_COLLECTIONS_UL_excluded_materials(gui.BaseItemUIList):
     pass
 
 
-class PATTERN_COLLECTIONS_PT_included_materials(gui.PATTERN_COLLECTIONS_PT_uilist, bpy.types.Panel):
+class PATTERN_COLLECTIONS_PT_included_materials(gui.PATTERN_COLLECTIONS_PT_uilist):
     custom_label = "Included Materials"
     uilist_class = "PATTERN_COLLECTIONS_UL_included_materials"
     category = "included_materials"
@@ -18,7 +17,7 @@ class PATTERN_COLLECTIONS_PT_included_materials(gui.PATTERN_COLLECTIONS_PT_uilis
     default_name = "context_material"
 
 
-class PATTERN_COLLECTIONS_PT_excluded_materials(gui.PATTERN_COLLECTIONS_PT_uilist, bpy.types.Panel):
+class PATTERN_COLLECTIONS_PT_excluded_materials(gui.PATTERN_COLLECTIONS_PT_uilist):
     custom_label = "Excluded Materials"
     uilist_class = "PATTERN_COLLECTIONS_UL_excluded_materials"
     category = "excluded_materials"

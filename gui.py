@@ -66,7 +66,7 @@ class AttributeItemUIList(bpy.types.UIList):
             layout.alignment = "CENTER"
 
 
-class PatternCollectionsPanel:
+class PatternCollectionsPanel(bpy.types.Panel):
     """
     Members all pattern collection panels should inherit.
     """
@@ -80,11 +80,14 @@ class PatternCollectionsPanel:
         return collection != context.scene.collection
 
 
-class PATTERN_COLLECTIONS_PT_pattern_collection(PatternCollectionsPanel, bpy.types.Panel):
+class PATTERN_COLLECTIONS_PT_pattern_collection(PatternCollectionsPanel):  # MARK: Main Panel
     """
     Main (parent) panel.
     """
     bl_label = "Sorting Pattern"
+
+    def draw_header(self, context):
+        layout = self.layout
 
     def draw(self, context):
         collection = context.collection
@@ -97,12 +100,17 @@ class PATTERN_COLLECTIONS_PT_pattern_collection(PatternCollectionsPanel, bpy.typ
             row.operator("collection.unregister_pattern_sort_timer", text="", icon="RADIOBUT_ON", depress=True)
         row.operator("collection.sort_collection")
 
-        box = layout.box()
-        box.operator("collection.import_pattern", text="Import", icon="IMPORT")
-        box.operator("collection.export_pattern", text="Export", icon="EXPORT")
+        col = layout.column(align=True)
+        col.operator("collection.import_pattern", text="Import", icon="IMPORT")
+        col.operator("collection.export_pattern", text="Export", icon="EXPORT")
+
+        row = layout.row(align=True)
+        row.operator("pattern_collections.open_preferences")
+        row.operator("pattern_collections.open_tracker")
+        row.operator("pattern_collections.open_documentation", text="Docs")
 
 
-class PATTERN_COLLECTIONS_PT_uilist(PatternCollectionsPanel, bpy.types.Panel):
+class PATTERN_COLLECTIONS_PT_uilist(PatternCollectionsPanel):
     """
     List panel all sorting category panels should inherit.
     """

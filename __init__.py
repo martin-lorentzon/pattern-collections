@@ -8,7 +8,7 @@ bl_info = {
     "doc_url": "https://github.com/martin-lorentzon/blender-pattern-collections",
     "tracker_url": "https://github.com/martin-lorentzon/blender-pattern-collections/issues",
     "support": "COMMUNITY",
-    "category": "User Interface"
+    "category": "Tools"
 }
 
 
@@ -32,6 +32,7 @@ if "bpy" in locals():
     reload(uv_layer_sort)
     reload(attribute_sort)
 else:
+    import bpy
     from . import addon_preferences
     from . import icons
     from . import utils
@@ -71,6 +72,9 @@ classes = (
     operators.PATTERN_COLLECTIONS_OT_unregister_timer,
     operators.PATTERN_COLLECTIONS_OT_import_pattern,
     operators.PATTERN_COLLECTIONS_OT_export_pattern,
+    operators.PATTERN_COLLECTIONS_OT_open_preferences,
+    operators.PATTERN_COLLECTIONS_OT_open_tracker,
+    operators.PATTERN_COLLECTIONS_OT_open_documentation,
 
     gui.PATTERN_COLLECTIONS_PT_pattern_collection,
 

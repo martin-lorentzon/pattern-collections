@@ -1,16 +1,15 @@
 from .. import gui
-import bpy
 
 
-class PATTERN_COLLECTIONS_UL_included_uv_layers(gui.BaseItemUIList, bpy.types.UIList):
+class PATTERN_COLLECTIONS_UL_included_uv_layers(gui.BaseItemUIList):
     pass
 
 
-class PATTERN_COLLECTIONS_UL_excluded_uv_layers(gui.BaseItemUIList, bpy.types.UIList):
+class PATTERN_COLLECTIONS_UL_excluded_uv_layers(gui.BaseItemUIList):
     pass
 
 
-class PATTERN_COLLECTIONS_PT_included_uv_layers(gui.PATTERN_COLLECTIONS_PT_uilist, bpy.types.Panel):
+class PATTERN_COLLECTIONS_PT_included_uv_layers(gui.PATTERN_COLLECTIONS_PT_uilist):
     custom_label = "Included UV Layers"
     uilist_class = "PATTERN_COLLECTIONS_UL_included_uv_layers"
     category = "included_uv_layers"
@@ -18,7 +17,7 @@ class PATTERN_COLLECTIONS_PT_included_uv_layers(gui.PATTERN_COLLECTIONS_PT_uilis
     default_name = "context_uv_layer"
 
 
-class PATTERN_COLLECTIONS_PT_excluded_uv_layers(gui.PATTERN_COLLECTIONS_PT_uilist, bpy.types.Panel):
+class PATTERN_COLLECTIONS_PT_excluded_uv_layers(gui.PATTERN_COLLECTIONS_PT_uilist):
     custom_label = "Excluded UV Layers"
     uilist_class = "PATTERN_COLLECTIONS_UL_excluded_uv_layers"
     category = "excluded_uv_layers"
