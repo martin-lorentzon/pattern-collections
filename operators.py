@@ -1,4 +1,6 @@
 import bpy
+from bpy.types import Operator
+from bpy.props import StringProperty
 from bpy_extras.io_utils import ExportHelper, ImportHelper
 from . import sorting_functions
 from . import utils
@@ -7,7 +9,15 @@ import time
 import json
 
 
-class PATTERN_COLLECTIONS_OT_sort_collection(bpy.types.Operator):
+def sort_collection(collection):
+    t0 = time.perf_counter()
+    sorting_commands = sorting_functions.sort_objects(collection, bpy.data.objects)
+    sorting_functions.process_sorting_commands(sorting_commands)
+    t1 = time.perf_counter()
+    return t1 - t0
+
+
+class PATTERN_COLLECTIONS_OT_sort_collection(Operator):
     bl_idname = "collection.sort_collection"
     bl_label = "Sort Collection"
     bl_description = "Sort all objects for the active collection"
@@ -15,58 +25,55 @@ class PATTERN_COLLECTIONS_OT_sort_collection(bpy.types.Operator):
 
     def execute(self, context):
         collection = context.collection
-        sorting_commands = sorting_functions.sort_objects(collection, bpy.data.objects)
-        sorting_functions.process_sorting_commands(sorting_commands)
+        delta_t = sort_collection(collection)
+        self.report({"INFO"}, f"Finished sorting {delta_t:.4f} in sec")
         return {"FINISHED"}
 
 
-class PATTERN_COLLECTIONS_OT_register_timer(bpy.types.Operator):
+class PATTERN_COLLECTIONS_OT_register_timer(Operator):
     bl_idname = "collection.register_pattern_sort_timer"
     bl_label = "Enable Automatic Sorting"
     bl_description = "Sort all objects for the active collection at regular intervals\n(WARNING: May cause Blender to momentarily hang for larger scenes)"
 
-    interval_seconds: bpy.props.FloatProperty(
-        name="Interval Seconds",
-        default=1.0)
-
-    def invoke(self, context, event):
-        return context.window_manager.invoke_props_dialog(self)
-
     def execute(self, context):
+        preferences = context.preferences
+        addon_prefs = preferences.addons[__package__].preferences
         collection = context.collection
 
         if collection.name in sorting_functions.sorting_timers:
-            self.report({"WARNING"}, "Cannot register timer for collection with auto-sort already enabled")
+            self.report({"WARNING"}, f"Automatic sorting is already enabled for collection {collection.name}")
             return {"CANCELLED"}
 
-        def timer_func(interval_seconds, collection_name):
-            start_time = time.time()  # Timing the function to prevent it from completely freeze or crash Blender
-            collection = bpy.data.collections[collection_name]
-            sorting_commands = sorting_functions.sort_objects(collection, bpy.data.objects)
+        if addon_prefs.safe_intervals:
+            def timer_func(collection_name, interval_seconds):
+                delta_t = sort_collection(bpy.data.collections[collection_name])
+                print(f"Finished sorting {delta_t:.4f} in sec")
+                return max(interval_seconds, delta_t * 10)
+        else:
+            def timer_func(collection_name, interval_seconds):
+                delta_t = sort_collection(bpy.data.collections[collection_name])
+                print(f"Finished sorting {delta_t:.4f} in sec")
+                return (interval_seconds)
 
-            sorting_functions.process_sorting_commands(sorting_commands)
+        partial = functools.partial(timer_func, collection.name, addon_prefs.sorting_interval)
 
-            execution_time = time.time() - start_time
-            return max(interval_seconds, execution_time * 10)
-
-        partial = functools.partial(timer_func, self.interval_seconds, collection.name)
-
-        bpy.app.timers.register(partial, first_interval=self.interval_seconds)
+        bpy.app.timers.register(partial, addon_prefs.sorting_interval)
         sorting_functions.sorting_timers[collection.name] = partial
 
         utils.redraw_ui()
         return {"FINISHED"}
 
 
-class PATTERN_COLLECTIONS_OT_unregister_timer(bpy.types.Operator):
+class PATTERN_COLLECTIONS_OT_unregister_timer(Operator):
     bl_idname = "collection.unregister_pattern_sort_timer"
     bl_label = "Disable Automatic Sorting"
     bl_description = "Sort all objects for the active collection at regular intervals\n(WARNING: May cause Blender to momentarily hang for larger scenes)"
 
     def execute(self, context):
         collection = context.collection
+
         if collection.name not in sorting_functions.sorting_timers:
-            self.report({"WARNING"}, "Cannot unregister timer for collection with auto-sort already disabled")
+            self.report({"WARNING"}, f"Automatic sorting is already disabled for collection {collection.name}")
             return {"CANCELLED"}
 
         bpy.app.timers.unregister(sorting_functions.sorting_timers[collection.name])
@@ -76,20 +83,17 @@ class PATTERN_COLLECTIONS_OT_unregister_timer(bpy.types.Operator):
         return {"FINISHED"}
 
 
-class PATTERN_COLLECTIONS_OT_export_pattern(bpy.types.Operator, ExportHelper):
+class PATTERN_COLLECTIONS_OT_export_pattern(Operator, ExportHelper):
     bl_idname = "collection.export_pattern"
     bl_label = "Export Pattern"
     bl_description = "Exports a pattern collection config to a JSON file"
 
-    filter_glob: bpy.props.StringProperty(default="*.json;", options={"HIDDEN"})
+    filter_glob: StringProperty(default="*.json;", options={"HIDDEN"})
     filename_ext = ".json"
 
-    def execute(self, context):  # TODO: Clean up this mess
+    def execute(self, context):
         collection = context.collection
         properties = collection.pattern_collection_properties
-        filepath = self.filepath
-
-        write_dict = dict()
 
         categories = ["included_names",       "excluded_names",
                       "included_hierarchies", "excluded_hierarchies",
@@ -99,41 +103,35 @@ class PATTERN_COLLECTIONS_OT_export_pattern(bpy.types.Operator, ExportHelper):
                       "included_uv_layers",   "excluded_uv_layers",
                       "included_attributes",  "excluded_attributes"]
 
-        # item_properties = ["name", "anchor", "case_sensitive", "enable", "value"]
+        categories_data = dict()
 
-        for category in categories:
-            category = getattr(properties, category)
+        for category_name in categories:
+            category = getattr(properties, category_name, None)
 
             if category is None:
                 continue
 
-            write_dict.setdefault(category, [])
+            categories_data.setdefault(category_name, [])
 
-            for item in category:  # item -> property group | category -> collection property
-                # write_item = {prop: getattr(item, prop) for prop in desired_properties if hasattr(item, prop)}  # <- Works, but requires a list of keys
+            for item in category:
+                item_data = {
+                    p.identifier: getattr(item, p.identifier) 
+                    for p in item.bl_rna.properties if not p.is_readonly
+                }
+                categories_data[category_name].append(item_data)
 
-                # write_item = {prop: getattr(item, prop) for prop in item.keys()}  # <- Can only read properties that have been set by the user
-                # (not intended behavior)
-
-                write_item = {prop.identifier: getattr(item, prop.identifier)  # <- Accomplishes the intention of the dict comprehension above
-                              # (why is bl_rna superior in this scenario?)
-                              for prop in item.bl_rna.properties
-                              if not prop.is_readonly}
-
-                write_dict[category].append(write_item)
-
-        with open(bpy.path.abspath(filepath), "w") as data:
-            json.dump(write_dict, data, indent=4)
+        with open(bpy.path.abspath(self.filepath), "w") as data:
+            json.dump(categories_data, data, indent=4)
         return {"FINISHED"}
 
 
-class PATTERN_COLLECTIONS_OT_import_pattern(bpy.types.Operator, ImportHelper):
+class PATTERN_COLLECTIONS_OT_import_pattern(Operator, ImportHelper):
     bl_idname = "collection.import_pattern"
     bl_label = "Import Pattern"
     bl_description = "Loads a pattern collection config from a JSON file"
     bl_options = {"REGISTER", "UNDO"}
 
-    filter_glob: bpy.props.StringProperty(
+    filter_glob: StringProperty(
         default="*.json;", options={"HIDDEN"})
 
     def execute(self, context):

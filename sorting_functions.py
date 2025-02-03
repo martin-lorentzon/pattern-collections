@@ -109,7 +109,7 @@ def test_category_attribute(properties: PropertyGroup, sorting_category: str, ob
     return True if invert else False
 
 
-def sort_objects(collection, objects: list) -> list[Tuple[bpy.types.Collection, list[bpy.types.Object], bool]]:
+def sort_objects(collection, objects: list[bpy.types.Object]) -> list[Tuple[bpy.types.Collection, list[bpy.types.Object], bool]]:
     sorting_commands = []
 
     properties = collection.pattern_collection_properties

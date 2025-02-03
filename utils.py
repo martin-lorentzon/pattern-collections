@@ -2,12 +2,13 @@ import bpy
 import bmesh
 
 
-def clamp(value, minimum, maximum):
-    return max(minimum, min(value, maximum))
+def redraw_ui():
+    for area in bpy.context.screen.areas:
+        area.tag_redraw()
 
 
-def all_parents(obj):
-    parent = obj.parent
+def all_parents(ob):
+    parent = ob.parent
     parent_list = []
     while parent:
         parent_list.append(parent)
@@ -15,10 +16,10 @@ def all_parents(obj):
     return parent_list
 
 
-def triangle_count(obj):
-    if isinstance(bpy.types.Object) and obj.type == "MESH":
+def triangle_count(ob):
+    if isinstance(ob, bpy.types.Object) and ob.type == "MESH":
         bm = bmesh.new()
-        bm.from_mesh(obj.data)
+        bm.from_mesh(ob.data)
         bmesh.ops.triangulate(bm, faces=bm.faces[:])
         triagles = len(bm.faces)
         bm.free()
@@ -27,28 +28,23 @@ def triangle_count(obj):
         return 0
 
 
-def volume(obj):
-    if isinstance(bpy.types.Object) and obj.type == "MESH":
-        return obj.dimensions.x * obj.dimensions.y * obj.dimensions.z
+def volume(ob):
+    if isinstance(ob, bpy.types.Object) and ob.type == "MESH":
+        return ob.dimensions.x * ob.dimensions.y * ob.dimensions.z
     else:
         return 0
 
 
-def surface_area(obj):
-    if isinstance(bpy.types.Object) and obj.type == "MESH":
+def surface_area(ob):
+    if isinstance(ob, bpy.types.Object) and ob.type == "MESH":
         bm = bmesh.new()
-        bm.from_mesh(obj.data)
+        bm.from_mesh(ob.data)
 
         for v in bm.verts:
-            v.co = obj.matrix_world @ v.co  # Reverse world matrix
+            v.co = ob.matrix_world @ v.co  # Reverse world matrix
 
         surface_area = sum(f.calc_area() for f in bm.faces)
         bm.free()
         return surface_area
     else:
         return 0
-
-
-def redraw_ui():
-    for area in bpy.context.screen.areas:
-        area.tag_redraw()

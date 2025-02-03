@@ -13,25 +13,26 @@ bl_info = {
 
 
 if "bpy" in locals():
-    import importlib
-    importlib.reload(icons)
-    importlib.reload(utils)
-    importlib.reload(list_utils)
-    importlib.reload(sorting_functions)
-    importlib.reload(category_item_properties)
-    importlib.reload(properties)
-    importlib.reload(operators)
-    importlib.reload(gui)
-
+    from importlib import reload
+    reload(addon_preferences)
+    reload(icons)
+    reload(utils)
+    reload(list_utils)
+    reload(sorting_functions)
+    reload(category_item_properties)
+    reload(properties)
+    reload(operators)
+    reload(gui)
     # Sorting categories
-    importlib.reload(name_sort)
-    importlib.reload(hierarchy_sort)
-    importlib.reload(type_sort)
-    importlib.reload(material_sort)
-    importlib.reload(collection_sort)
-    importlib.reload(uv_layer_sort)
-    importlib.reload(attribute_sort)
+    reload(name_sort)
+    reload(hierarchy_sort)
+    reload(type_sort)
+    reload(material_sort)
+    reload(collection_sort)
+    reload(uv_layer_sort)
+    reload(attribute_sort)
 else:
+    from . import addon_preferences
     from . import icons
     from . import utils
     from . import list_utils
@@ -53,6 +54,8 @@ else:
 
 
 classes = (
+    addon_preferences.PATTERN_COLLECTIONS_Preferences,
+
     category_item_properties.BaseItemPropertyGroup,
     category_item_properties.AttributeItemPropertyGroup,
 
@@ -70,7 +73,6 @@ classes = (
     operators.PATTERN_COLLECTIONS_OT_export_pattern,
 
     gui.PATTERN_COLLECTIONS_PT_pattern_collection,
-    # gui.PATTERN_COLLECTIONS_PT_uilist,
 
     # region Sorting categories classes
     name_sort.PATTERN_COLLECTIONS_UL_included_names,
@@ -134,11 +136,6 @@ def register():
 
     @persistent
     def load_handler(dummy):
-        for timer in sorting_functions.sorting_timers.values():
-            try:
-                bpy.app.timers.unregister(timer)
-            except:
-                pass
         sorting_functions.sorting_timers.clear()
 
     bpy.app.handlers.load_post.append(load_handler)
