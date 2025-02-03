@@ -21,8 +21,8 @@ class PATTERN_COLLECTIONS_OT_sort_collection(bpy.types.Operator):
 
 
 class PATTERN_COLLECTIONS_OT_register_timer(bpy.types.Operator):
-    bl_idname = "collection.register_timer"
-    bl_label = "Register Sort Timer"
+    bl_idname = "collection.register_pattern_sort_timer"
+    bl_label = "Enable Automatic Sorting"
     bl_description = "Sort all objects for the active collection at regular intervals\n(WARNING: May cause Blender to momentarily hang for larger scenes)"
 
     interval_seconds: bpy.props.FloatProperty(
@@ -59,8 +59,8 @@ class PATTERN_COLLECTIONS_OT_register_timer(bpy.types.Operator):
 
 
 class PATTERN_COLLECTIONS_OT_unregister_timer(bpy.types.Operator):
-    bl_idname = "collection.unregister_timer"
-    bl_label = "Unregister Sort Timer"
+    bl_idname = "collection.unregister_pattern_sort_timer"
+    bl_label = "Disable Automatic Sorting"
     bl_description = "Sort all objects for the active collection at regular intervals\n(WARNING: May cause Blender to momentarily hang for larger scenes)"
 
     def execute(self, context):

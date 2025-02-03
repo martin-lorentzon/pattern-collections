@@ -92,9 +92,9 @@ class PATTERN_COLLECTIONS_PT_pattern_collection(PatternCollectionsPanel, bpy.typ
 
         row = layout.row(align=True)
         if collection.name not in sorting_functions.sorting_timers:
-            row.operator("collection.register_timer", text="", icon="RADIOBUT_OFF")
+            row.operator("collection.register_pattern_sort_timer", text="", icon="RADIOBUT_OFF")
         else:
-            row.operator("collection.unregister_timer", text="", icon="RADIOBUT_ON", depress=True)
+            row.operator("collection.unregister_pattern_sort_timer", text="", icon="RADIOBUT_ON", depress=True)
         row.operator("collection.sort_collection")
 
         col = layout.column()
