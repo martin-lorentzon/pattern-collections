@@ -5,7 +5,7 @@ schema_version = "1.0.0"
 id = "pattern_collections"
 version = "1.0.0"
 name = "Pattern Collections"
-tagline = "Sort objects by anything with reusable patterns"
+tagline = "Pattern-based Collection Sorting"
 maintainer = "Martin Lorentzon <martin.lorentzon@afry.com>"
 # Supported types: "add-on", "theme"
 type = "add-on"
@@ -15,7 +15,7 @@ type = "add-on"
 
 # # Optional: tag list defined by Blender and server, see:
 # # https://docs.blender.org/manual/en/dev/advanced/extensions/tags.html
-tags = ["Pipeline"]
+tags = ["Pipeline", "Scene"]
 
 blender_version_min = "4.2.0"
 # # Optional: Blender version that the extension does not support, earlier versions are supported.

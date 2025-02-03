@@ -1,6 +1,6 @@
 bl_info = {
     "name": "Pattern Collections",
-    "description": "Sort objects by anything with reusable patterns",
+    "description": "Pattern-based Collection Sorting",
     "author": "Martin Lorentzon",
     "version": (1, 0),
     "blender": (4, 2, 0),

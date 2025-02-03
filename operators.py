@@ -32,7 +32,7 @@ class PATTERN_COLLECTIONS_OT_sort_collection(Operator):
 
 
 class PATTERN_COLLECTIONS_OT_register_timer(Operator):
-    bl_idname = "collection.register_pattern_sort_timer"
+    bl_idname = "collection.register_sort_timer"
     bl_label = "Enable Automatic Sorting"
     bl_description = "Sort all objects for the active collection at regular intervals\n(WARNING: May cause Blender to momentarily freeze for larger scenes)"
 
@@ -65,7 +65,7 @@ class PATTERN_COLLECTIONS_OT_register_timer(Operator):
 
 
 class PATTERN_COLLECTIONS_OT_unregister_timer(Operator):
-    bl_idname = "collection.unregister_pattern_sort_timer"
+    bl_idname = "collection.unregister_sort_timer"
     bl_label = "Disable Automatic Sorting"
     bl_description = "Sort all objects for the active collection at regular intervals\n(WARNING: May cause Blender to momentarily freeze for larger scenes)"
 
@@ -86,7 +86,7 @@ class PATTERN_COLLECTIONS_OT_unregister_timer(Operator):
 class PATTERN_COLLECTIONS_OT_export_pattern(Operator, ExportHelper):
     bl_idname = "collection.export_pattern"
     bl_label = "Export Pattern"
-    bl_description = "Export a sorting pattern to a JSON file"
+    bl_description = "Export sorting pattern to a JSON file"
 
     filter_glob: StringProperty(default="*.json;", options={"HIDDEN"})
     filename_ext = ".json"
@@ -128,7 +128,7 @@ class PATTERN_COLLECTIONS_OT_export_pattern(Operator, ExportHelper):
 class PATTERN_COLLECTIONS_OT_import_pattern(Operator, ImportHelper):
     bl_idname = "collection.import_pattern"
     bl_label = "Import Pattern"
-    bl_description = "Import a sorting pattern from a JSON file"
+    bl_description = "Import sorting pattern from a JSON file"
     bl_options = {"REGISTER", "UNDO"}
 
     filter_glob: StringProperty(
