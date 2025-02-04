@@ -1,6 +1,7 @@
 # Pattern Collections for Blender
 Pattern-based Collection Sorting allows for precise control over how our scenes are organised.  
-Each collection holds its own pattern, a ruleset describing which objects to collect and those to leave out.
+Each collection holds its own pattern, a ruleset describing which objects to collect and those to leave out.  
+Patterns can be exported to JSON files and be reused for future projects.
 
 ### We can utilise the currently implemented sorting categories ### 
 * Included.../Excluded Names
@@ -18,11 +19,11 @@ Each collection holds its own pattern, a ruleset describing which objects to col
 
 ### Attribute rules have a couple of additional features ###
 * Two more anchors - (**Greater Than, Less Than**) (For numeric values)
-* Reserved property names  
+* Reserved attribute names  
   * **triangles** (shorthand: tris) - The object's number of triangles (0 for non-meshes)
-  * **bounding_box** (shorthand: bbox) - The object's bounding box (0 for non-meshes)
+  * **bounding_box** (shorthand: bbox) - The object's bounding box volume (0 for non-meshes)
   * **surface_area** (shorthand: area) - The object's surface area (0 for non-meshes)
-    * (These can be mixed into **tris/area** e.g. to sort by the objects' triangle density)
+    * (These can be mixed, use **tris/area** to sort by objects triangle density)
 
 ### Automatic Sorting
 TODO:
