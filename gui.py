@@ -97,16 +97,15 @@ class PATTERN_COLLECTIONS_PT_pattern_collection(PatternCollectionsPanel):  # MAR
 
         row = layout.row(align=True)
         if collection.name not in sorting_functions.sorting_timers:
-            row.operator("collection.register_sort_timer", text="", icon="RADIOBUT_OFF")
+            row.operator("collection.register_pattern_sort_timer", text="", icon="RADIOBUT_OFF")
         else:
-            row.operator("collection.unregister_sort_timer", text="", icon="RADIOBUT_ON", depress=True)
-        row.operator("collection.sort_collection")
+            row.operator("collection.unregister_pattern_sort_timer", text="", icon="RADIOBUT_ON", depress=True)
+        row.operator("collection.pattern_sort")
 
         col = layout.column(align=True)
         op = col.operator("collection.import_pattern", text="Import", icon="IMPORT")
-        base_filename = collection.name.lower() if addon_prefs.lowercase_filename else collection.name
-        op.filepath = base_filename + addon_prefs.filename_suffix
         op = col.operator("collection.export_pattern", text="Export", icon="EXPORT")
+        base_filename = collection.name.lower() if addon_prefs.lowercase_filename else collection.name
         op.filepath = base_filename + addon_prefs.filename_suffix
 
         row = layout.row(align=True)

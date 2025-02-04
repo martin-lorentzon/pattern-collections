@@ -67,7 +67,7 @@ classes = (
     list_utils.LIST_OT_duplicate_item,
     list_utils.LIST_OT_move_item,
 
-    operators.PATTERN_COLLECTIONS_OT_sort_collection,
+    operators.PATTERN_COLLECTIONS_OT_sort,
     operators.PATTERN_COLLECTIONS_OT_register_timer,
     operators.PATTERN_COLLECTIONS_OT_unregister_timer,
     operators.PATTERN_COLLECTIONS_OT_import_pattern,
