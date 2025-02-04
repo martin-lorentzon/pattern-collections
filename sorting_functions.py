@@ -166,7 +166,6 @@ def sort_objects(collection, objects: list[bpy.types.Object]) -> list[Tuple[bpy.
 
     if len(unlink_objects) > 0:
         sorting_commands.append((collection, unlink_objects, False))
-    
     return sorting_commands
 
 
