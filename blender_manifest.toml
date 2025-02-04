@@ -11,7 +11,7 @@ maintainer = "Martin Lorentzon <martin.lorentzon@afry.com>"
 type = "add-on"
 
 # # Optional: link to documentation, support, source files, etc
-# website = "https://extensions.blender.org/add-ons/my-example-package/"
+website = "https://github.com/martin-lorentzon/PatternCollections"
 
 # # Optional: tag list defined by Blender and server, see:
 # # https://docs.blender.org/manual/en/dev/advanced/extensions/tags.html
@@ -56,9 +56,9 @@ license = ["SPDX:GPL-3.0-or-later"]
 # # Keep this a single short sentence without a period (.) at the end.
 # # For longer explanations use the documentation or detail page.
 #
-# [permissions]
+[permissions]
 # network = "Need to sync motion-capture data to server"
-# files = "Import/export FBX from/to disk"
+files = "Import/export FBX from/to disk to provide JSON File I/O for Sorting Patterns"
 # clipboard = "Copy and paste bone transforms"
 
 # # Optional: advanced build settings.
