@@ -1,6 +1,8 @@
+import bpy
 from bpy.types import AddonPreferences
 from bpy.props import FloatProperty, BoolProperty, StringProperty
 from . import icons
+
 
 class PATTERN_COLLECTIONS_Preferences(AddonPreferences):
     bl_idname = __package__
@@ -32,25 +34,34 @@ class PATTERN_COLLECTIONS_Preferences(AddonPreferences):
         layout = self.layout
         pcoll = icons.preview_collections["main"]
 
-        row = layout.row()
-        row.alignment = "LEFT"
-        row.label(text="", icon="FILE")
-        row.prop(self, "filename_suffix", text="")
-        row.label(text="Filename Suffix")
+        def draw_filename_prefs(layout: bpy.types.UILayout):
+            split = layout.split(factor=0.5)
+            split.label(text="Filename Suffix", icon="FILE")
+            split.prop(self, "filename_suffix", text="")
 
-        row = layout.row()
-        row.alignment = "LEFT"
-        icon = pcoll["CASE_SENSITIVITY_OFF"] if self.lowercase_filename else pcoll["CASE_SENSITIVITY_ON"]
-        row.label(text="", icon_value=icon.icon_id)
-        row.prop(self, "lowercase_filename")
+            split = layout.split(factor=0.5)
+            split.label(text="Lowercase Filenames", icon_value=pcoll["CASE_SENSITIVITY_OFF"].icon_id)
+            split.prop(self, "lowercase_filename", text="")
 
-        row = layout.row()
-        row.alignment = "LEFT"
-        row.label(text="", icon="TIME")
-        row.prop(self, "sorting_interval", text="")
-        row.label(text="Automatic Sorting Interval")
+        def draw_automatic_sorting_prefs(layout: bpy.types.UILayout):
+            split = layout.split(factor=0.5)
+            split.label(text="Automatic Sorting Interval", icon="TIME")
+            split.prop(self, "sorting_interval", text="")
 
-        row = layout.row()
-        row.alignment = "LEFT"
-        row.label(text="", icon="FAKE_USER_ON")
-        row.prop(self, "safe_intervals")
+            split = layout.split(factor=0.5)
+            split.label(text="Safe Automatic Sorting", icon="FAKE_USER_ON")
+            split.prop(self, "safe_intervals", text="")
+        
+        if bpy.app.version >= (4, 1, 0):
+            header, panel = layout.panel("filenames_panel", default_closed=True)
+            header.label(text="Filenames")
+            if panel:
+                draw_filename_prefs(panel)
+
+            header, panel = layout.panel("automatic_sorting_panel", default_closed=True)
+            header.label(text="Automatic Sorting")
+            if panel:
+                draw_automatic_sorting_prefs(panel)
+        else:
+            draw_filename_prefs(panel)
+            draw_automatic_sorting_prefs(panel)
