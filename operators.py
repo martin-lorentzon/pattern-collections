@@ -1,5 +1,5 @@
 import bpy
-from bpy.types import Operator
+from bpy.types import Operator, CollectionProperty
 from bpy.props import StringProperty
 from bpy_extras.io_utils import ExportHelper, ImportHelper
 from . import sorting_functions
@@ -89,6 +89,7 @@ class PATTERN_COLLECTIONS_OT_export_pattern(Operator, ExportHelper):
     bl_description = "Export sorting pattern to a JSON file"
 
     filter_glob: StringProperty(default="*.json;", options={"HIDDEN"})
+    filename_ext = ".json"
 
     def execute(self, context):
         collection = context.collection
@@ -109,10 +110,7 @@ class PATTERN_COLLECTIONS_OT_export_pattern(Operator, ExportHelper):
         categories_data = dict()
 
         for category_name in categories:
-            category = getattr(properties, category_name, None)
-
-            if category is None:
-                continue
+            category: CollectionProperty = getattr(properties, category_name)
 
             categories_data.setdefault(category_name, [])
 
@@ -140,10 +138,10 @@ class PATTERN_COLLECTIONS_OT_import_pattern(Operator, ImportHelper):
     def execute(self, context):
         collection = context.collection
         properties = collection.pattern_collection_properties
-        filepath = self.filepath
-
-        with open(bpy.path.abspath(filepath), "r") as data:
-            properties_dict = json.load(data)
+        
+        if not self.filepath.endswith(".json"):
+            self.report({"WARNING"}, "Unsupported format")
+            return {"CANCELLED"}
 
         sorting_categories = ["included_names",       "excluded_names",
                               "included_hierarchies", "excluded_hierarchies",
@@ -153,16 +151,16 @@ class PATTERN_COLLECTIONS_OT_import_pattern(Operator, ImportHelper):
                               "included_uv_layers",   "excluded_uv_layers",
                               "included_attributes",  "excluded_attributes"]
 
-        for category in sorting_categories:
-            collection_property = getattr(properties, category, None)
+        with open(bpy.path.abspath(self.filepath), "r") as data:
+            categories_data = json.load(data)
 
-            if collection_property is None:
-                continue
+        for category_name in sorting_categories:
+            category: CollectionProperty = getattr(properties, category_name)
 
-            collection_property.clear()
+            category.clear()
 
-            for data in properties_dict.get(category, []):
-                item = collection_property.add()
+            for data in categories_data.get(category_name, []):
+                item = category.add()
 
                 for prop, value in data.items():
                     setattr(item, prop, value)

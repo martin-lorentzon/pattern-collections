@@ -26,8 +26,8 @@ class BaseItemUIList(bpy.types.UIList):
 
             case_sub = sub.row(align=True)
             case_sub.enabled = "REGEX" not in item.anchor
-            case_sensitivity_icon = pcoll["CASE_SENSITIVITY_ON"] if item.case_sensitive else pcoll["CASE_SENSITIVITY_OFF"]
-            case_sub.prop(item, "case_sensitive", text="", icon_value=case_sensitivity_icon.icon_id, emboss=False)
+            case_icon = pcoll["CASE_SENSITIVITY_ON"] if item.case_sensitive else pcoll["CASE_SENSITIVITY_OFF"]
+            case_sub.prop(item, "case_sensitive", text="", icon_value=case_icon.icon_id, emboss=False)
 
             sub.prop(item, "anchor", text="", emboss=False)
 
@@ -57,8 +57,8 @@ class AttributeItemUIList(bpy.types.UIList):
             case_sub = sub.row(align=True)
             case_sub.alignment = "RIGHT"
             case_sub.enabled = not any([s in item.anchor for s in ["REGEX", "GREATER_THAN", "LESS_THAN"]])
-            case_sensitivity_icon = pcoll["CASE_SENSITIVITY_ON"] if item.case_sensitive else pcoll["CASE_SENSITIVITY_OFF"]
-            case_sub.prop(item, "case_sensitive", text="", icon_value=case_sensitivity_icon.icon_id, emboss=False)
+            case_icon = pcoll["CASE_SENSITIVITY_ON"] if item.case_sensitive else pcoll["CASE_SENSITIVITY_OFF"]
+            case_sub.prop(item, "case_sensitive", text="", icon_value=case_icon.icon_id, emboss=False)
 
             sub.prop(item, "anchor", text="", emboss=False)
 
@@ -90,6 +90,8 @@ class PATTERN_COLLECTIONS_PT_pattern_collection(PatternCollectionsPanel):  # MAR
         layout = self.layout
 
     def draw(self, context):
+        preferences = context.preferences
+        addon_prefs = preferences.addons[__package__].preferences
         collection = context.collection
         layout = self.layout
 
@@ -101,8 +103,11 @@ class PATTERN_COLLECTIONS_PT_pattern_collection(PatternCollectionsPanel):  # MAR
         row.operator("collection.sort_collection")
 
         col = layout.column(align=True)
-        col.operator("collection.import_pattern", text="Import", icon="IMPORT")
-        col.operator("collection.export_pattern", text="Export", icon="EXPORT")
+        op = col.operator("collection.import_pattern", text="Import", icon="IMPORT")
+        base_filename = collection.name.lower() if addon_prefs.lowercase_filename else collection.name
+        op.filepath = base_filename + addon_prefs.filename_suffix + ".json"
+        op = col.operator("collection.export_pattern", text="Export", icon="EXPORT")
+        op.filepath = base_filename + addon_prefs.filename_suffix + ".json"
 
         row = layout.row(align=True)
         row.operator("pattern_collections.open_preferences")
