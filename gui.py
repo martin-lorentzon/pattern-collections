@@ -105,9 +105,9 @@ class PATTERN_COLLECTIONS_PT_pattern_collection(PatternCollectionsPanel):  # MAR
         col = layout.column(align=True)
         op = col.operator("collection.import_pattern", text="Import", icon="IMPORT")
         base_filename = collection.name.lower() if addon_prefs.lowercase_filename else collection.name
-        op.filepath = base_filename + addon_prefs.filename_suffix + ".json"
+        op.filepath = base_filename + addon_prefs.filename_suffix
         op = col.operator("collection.export_pattern", text="Export", icon="EXPORT")
-        op.filepath = base_filename + addon_prefs.filename_suffix + ".json"
+        op.filepath = base_filename + addon_prefs.filename_suffix
 
         row = layout.row(align=True)
         row.operator("pattern_collections.open_preferences")
