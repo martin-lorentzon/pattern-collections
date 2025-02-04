@@ -99,13 +99,15 @@ class PATTERN_COLLECTIONS_OT_export_pattern(Operator, ExportHelper):
             self.report({"WARNING"}, "Unsupported format")
             return {"CANCELLED"}
 
-        categories = ["included_names",       "excluded_names",
-                      "included_hierarchies", "excluded_hierarchies",
-                      "included_types",       "excluded_types",
-                      "included_materials",   "excluded_materials",
-                      "included_collections", "excluded_collections",
-                      "included_uv_layers",   "excluded_uv_layers",
-                      "included_attributes",  "excluded_attributes"]
+        categories = [
+            "included_names",       "excluded_names",
+            "included_hierarchies", "excluded_hierarchies",
+            "included_types",       "excluded_types",
+            "included_materials",   "excluded_materials",
+            "included_collections", "excluded_collections",
+            "included_uv_layers",   "excluded_uv_layers",
+            "included_attributes",  "excluded_attributes"
+            ]
 
         categories_data = dict()
 
@@ -143,13 +145,15 @@ class PATTERN_COLLECTIONS_OT_import_pattern(Operator, ImportHelper):
             self.report({"WARNING"}, "Unsupported format")
             return {"CANCELLED"}
 
-        sorting_categories = ["included_names",       "excluded_names",
-                              "included_hierarchies", "excluded_hierarchies",
-                              "included_types",       "excluded_types",
-                              "included_materials",   "excluded_materials",
-                              "included_collections", "excluded_collections",
-                              "included_uv_layers",   "excluded_uv_layers",
-                              "included_attributes",  "excluded_attributes"]
+        sorting_categories = [
+            "included_names",       "excluded_names",
+            "included_hierarchies", "excluded_hierarchies",
+            "included_types",       "excluded_types",
+            "included_materials",   "excluded_materials",
+            "included_collections", "excluded_collections",
+            "included_uv_layers",   "excluded_uv_layers",
+            "included_attributes",  "excluded_attributes"
+            ]
 
         with open(bpy.path.abspath(self.filepath), "r") as data:
             categories_data = json.load(data)

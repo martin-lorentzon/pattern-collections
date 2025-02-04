@@ -107,7 +107,7 @@ class LIST_OT_duplicate_item(Operator):
         return {"FINISHED"}
 
 
-class LIST_OT_move_item(bpy.types.Operator):
+class LIST_OT_move_item(Operator):
     bl_idname = "list.move_item"
     bl_label = "Move Item"
     bl_description = "Move the active item up/down in the list"

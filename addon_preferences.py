@@ -6,10 +6,10 @@ from . import icons
 
 class PATTERN_COLLECTIONS_Preferences(AddonPreferences):
     bl_idname = __package__
-    
+
     sorting_interval: FloatProperty(
         name="Automatic Sorting Interval",
-        description = "Time between each automatic sort",
+        description="Time between each automatic sort",
         min=0.1,
         default=1,
         subtype="TIME_ABSOLUTE"
@@ -29,7 +29,7 @@ class PATTERN_COLLECTIONS_Preferences(AddonPreferences):
         description="Turn filenames lowercase",
         default=True
     )
-    
+
     def draw(self, context):
         layout = self.layout
         pcoll = icons.preview_collections["main"]
@@ -51,7 +51,7 @@ class PATTERN_COLLECTIONS_Preferences(AddonPreferences):
             split = layout.split(factor=0.5)
             split.label(text="Safe Automatic Sorting", icon="FAKE_USER_ON")
             split.prop(self, "safe_intervals", text="")
-        
+
         if bpy.app.version >= (4, 1, 0):
             header, panel = layout.panel("filenames_panel", default_closed=True)
             header.label(text="Filenames")
