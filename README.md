@@ -1,71 +1,40 @@
-# Pattern Collections for Blender
-Organize your Blender scene with Pattern Collections, designed to bring structure and automation to your pipeline.  
-Define precise rules for how objects are categorized, reducing manual sorting and streamlining your use of the outliner.
-
-### Some use cases
-* Keeping your blend-files tidy as an artist
-* Sorting literally thousands of objects into bake collections
-* Spotting small, big or highly dense geometries in your pipeline
-
+# Pattern-Based Collections for Blender
+Categorizing selections of objects within scenes is essential for various digital content workflows. Blender already provides an API schema, [bpy.types.Collection](https://docs.blender.org/api/current/bpy.types.Collection.html) to do this, but is lacking in tools (code and non-code) to find objects by common properties and metadata. This extension draws inspiration from [Pattern-Based Collections for OpenUSD](https://github.com/PixarAnimationStudios/OpenUSD-proposals/tree/main/proposals/pattern-based-collections) and makes use of existing syntax such as RegEx and JSON together with a custom graphical user interface to 1) be familiar to pipeline developers and 2) be usable by Blender users without code knowledge.  
+  
+You can find the extension's key features below ↓
 ## Automatic Sorting
-Design away without constantly managing a cluttered outliner by turning on automatic sorting
+Zero stressful outliner management while creating: let the extension take over by enabling automatic sorting
   
 ![automatic_sorting](https://github.com/user-attachments/assets/2c35a410-6f09-4401-9851-1e3d90fa5f15)
-
-## Lightning fast Configuration
-Configuring, testing and reiterating on sorting patterns is fast and requires minimal effort
+## User-friendly Configuration
+Configure, test and reiterate on your collection patterns from the Blender interface
   
-![rules_setup](https://github.com/user-attachments/assets/11459530-66b9-4549-abdb-ec03a43f8276)
-
+![rules_setup](https://github.com/user-attachments/assets/c3398a3c-0787-4dc9-9eac-8445cfb13c3e)
 ## JSON Export
-Export and reuse your sorting patterns for future projects ⭐
-
+Export and reuse your collection patterns for future projects
 ## Python API
 ```py
-context.collection = bpy.data.collections.new(name="New Pattern Collection")
+# Assumes you have an active collection
 
 bpy.ops.collection.import_pattern(filepath="")  # Reads the json file
-bpy.ops.collection.pattern_sort()
+bpy.ops.collection.pattern_sort()  # Sorts the collection
 ```
-
-## More Details
-<details>
-<summary>Sorting Categories</summary>
-
-### Currently Available Sorting Categories
-
-* Included.../Excluded **Names**
-* Included.../Excluded **Hierarchies**
-* Included.../Excluded **Types**
-* Included.../Excluded **Materials**
-* Included.../Excluded **Collections**
-* Included.../Excluded **UV Layers**
-* Included.../Excluded **Attributes**
-</details>
-
-<details>
-<summary>Common Rules</summary>
-
-### A rule (or item) in any category has the implemented functionalities-
-
-* **Enable/Disable** - Toggle its impact on sorting without completely removing it  
-* **Case Sensitivity** - Determines if the item is processed as case-sensitive  
+## Available Sorting Categories
+* Included/Excluded **Names**
+* Included/Excluded **Hierarchies**
+* Included/Excluded **Types**
+* Included/Excluded **Materials**
+* Included/Excluded **Collections**
+* Included/Excluded **UV Layers**
+* Included/Excluded **Attributes**
+## Additional Details
+* **Enable/Disable** - Toggle its impact on sorting without completely removing it
+* **Case Sensitivity** - Determines if the item is processed as case-sensitive
 * **Anchor** - An item's relationship to the candidates
-  * (Match, Contains, Starts with, Ends with, Match Rgx, Search Rgx)  
-</details>
-
-<details>
-<summary>Attributes and Metadata</summary>
-  
-### Rules in the attribute category have added features to better utilise metadata
-  
-* Two more anchors - (**Greater Than, Less Than**) (For numeric values)
-* Reserved attribute names  
-  * **triangles** (shorthand: tris) - The object's number of triangles (0 for non-meshes)
-  * **bounding_box** (shorthand: bbox) - The object's bounding box volume (0 for non-meshes)
-  * **surface_area** (shorthand: area) - The object's surface area (0 for non-meshes)
-    * (These can be mixed, e.g., use **tris/area** to sort by triangle density)
----
-![attributes_demo](https://github.com/user-attachments/assets/1a6f9114-6598-45cc-9626-4f8542afffcd)
-</details>
-
+  * (Match, Contains, Starts with, Ends with, Match Rgx, Search Rgx, Greater, Less)
+* **Reserved Attribute Names**
+  * **triangles** (alt. tris) - The object's number of triangles (0 for non-meshes)
+  * **bounding_box** (alt. bbox) - The object's bounding box volume (0 for non-meshes)
+  * **surface_area** (alt. area) - The object's surface area (0 for non-meshes)
+    * (These can be mixed, e.g., use `tris/area` to sort by triangle density)
+<img src="https://github.com/user-attachments/assets/9a4ff9fc-cd48-455b-bdb6-71fe38003160" width="467"/>
