@@ -16,12 +16,12 @@ class PATTERN_COLLECTIONS_Preferences(AddonPreferences):
     )
     safe_intervals: BoolProperty(
         name="Safe Automatic Sorting",
-        description="Adjusts the sorting interval based on the previous sort duration to prevent Blender freezing (multiplies by 10)",
+        description="Adjusts the sorting interval based on the previous sort duration to prevent Blender freezing indefinitely (multiplies by 10)",
         default=True
     )
     filename_suffix: StringProperty(
         name="Filename Suffix",
-        description="Suffix at the end of JSON files",
+        description="Suffix at the end of exported JSON files",
         default="_col_pattern"
     )
     lowercase_filename: BoolProperty(

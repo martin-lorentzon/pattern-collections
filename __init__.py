@@ -1,6 +1,6 @@
 bl_info = {
     "name": "Pattern Collections",
-    "description": "Pattern-based Collection Sorting",
+    "description": "Pattern-Based Collections for Blender",
     "author": "Martin Lorentzon",
     "version": (1, 0),
     "blender": (4, 2, 0),
