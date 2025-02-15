@@ -3,7 +3,7 @@ schema_version = "1.0.0"
 # Example of manifest file for a Blender extension
 # Change the values according to your extension
 id = "pattern_collections"
-version = "1.0.1"
+version = "1.0.2"
 name = "Pattern Collections"
 tagline = "Pattern-Based Collections for Blender"
 maintainer = "Martin Lorentzon <martin.lorentzon@afry.com>"
@@ -63,11 +63,18 @@ files = "Import/export FBX from/to disk to provide JSON File I/O"
 
 # # Optional: advanced build settings.
 # # https://docs.blender.org/manual/en/dev/advanced/extensions/command_line_arguments.html#command-line-args-extension-build
-# [build]
+[build]
 # # These are the default build excluded patterns.
 # # You only need to edit them if you want different options.
-# paths_exclude_pattern = [
-#   "__pycache__/",
-#   "/.git/",
-#   "/*.zip",
-# ]
+paths_exclude_pattern = [
+    "__pycache__/",
+    "/.git*",
+    "/*.zip",
+    "/*.bat",
+    "/*.blend",
+    "/*.blend1",
+    "icons/*.blend",
+    "icons/*.blend1",
+    "images/",
+    "/*.png",
+]

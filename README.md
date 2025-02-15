@@ -1,5 +1,5 @@
 # Pattern-Based Collections for Blender
-Categorising selections of objects within scenes is crucial for various digital content workflows. Blender gives us access to the [Collection type](https://docs.blender.org/api/current/bpy.types.Collection.html) through its Python API but lacks in tools (code and non-code) for grouping objects by common properties and metadata. This extension draws inspiration from [Pattern-Based Collections for OpenUSD](https://github.com/PixarAnimationStudios/OpenUSD-proposals/tree/main/proposals/pattern-based-collections) and is built on top of existing standards like RegEx and the JSON format to 1) be easy to integrate in existing pipelines and 2) be usable by Blender users without code knowledge.
+Categorising selections of objects within scenes is crucial for various digital content workflows. Blender gives us access to the [Collection type](https://docs.blender.org/api/current/bpy.types.Collection.html) through its Python API but lacks in tools (code and non-code) for grouping objects by common properties and metadata. This extension draws inspiration from [Pattern-Based Collections for OpenUSD](https://github.com/PixarAnimationStudios/OpenUSD-proposals/tree/main/proposals/pattern-based-collections) and is built on top of existing standards like RegEx and the JSON format to enable configuration and layering of precise sorting rules for collections in Blender.
 
 ### Some use cases
 * Keep your blend-files tidy as an artist
@@ -33,7 +33,7 @@ bpy.ops.collection.pattern_sort()  # Sorts the collection
 * Included/Excluded **Attributes**
 
 ## Optimisation
-The extension has the potential of sorting 1K objects in less than one second. I'm continuously searching for more optimisations; however, most of the time sorting is spent on unlinking/linking of objects and cannot be parallelised.
+The extension has the potential of sorting 1K objects in less than one second. I'm continuously searching for more optimisations; however most of the time sorting is spent on unlinking/linking of objects and cannot be parallelised.
 
 ## Additional Details
 * **Enable/Disable** - Toggle its impact on sorting without completely removing it
