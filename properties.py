@@ -2,7 +2,6 @@
 This module defines the (pattern collection) property group that gets assigned to every collection.
 """
 
-import bpy
 from bpy.props import CollectionProperty, IntProperty
 from bpy.types import PropertyGroup
 from .category_item_properties import BaseItemPropertyGroup, AttributeItemPropertyGroup

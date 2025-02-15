@@ -62,6 +62,6 @@ class AttributeItemPropertyGroup(BaseItemPropertyGroup):
     value: bpy.props.StringProperty(
         name="Value",
         description="The value of the attribute",
-        default="value"
+        default=""
         )
 # fmt: on

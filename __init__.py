@@ -2,7 +2,7 @@ bl_info = {
     "name": "Pattern Collections",
     "description": "Pattern-Based Collections for Blender",
     "author": "Martin Lorentzon",
-    "version": (1, 0),
+    "version": (1, 0, 1),
     "blender": (4, 2, 0),
     "location": "Properties > Collection > Sorting Pattern",
     "doc_url": "https://github.com/martin-lorentzon/blender-pattern-collections",

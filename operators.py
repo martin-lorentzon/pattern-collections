@@ -202,6 +202,6 @@ class PATTERN_COLLECTIONS_OT_open_documentation(Operator):
     bl_description = "Open the documentation"
 
     def execute(self, context):
-        url = "https://github.com/martin-lorentzon/PatternCollections?#pattern-based-collections-for-blender"
+        url = "https://github.com/martin-lorentzon/pattern-collections?#pattern-based-collections-for-blender"
         webbrowser.open(url)
         return {"FINISHED"}

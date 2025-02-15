@@ -49,7 +49,7 @@ class AttributeItemUIList(bpy.types.UIList):
             row.prop(item, "enable", text="", icon=enable_icon, emboss=False)
 
             row.prop(item, "name", text="", emboss=False)
-            row.prop(item, "value", text="", emboss=False)
+            row.prop(item, "value", text="", emboss=False, placeholder="<Insert Value>")
 
             sub = row.row(align=True)
             sub.alignment = "RIGHT"
