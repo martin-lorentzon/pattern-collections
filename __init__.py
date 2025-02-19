@@ -2,7 +2,7 @@ bl_info = {
     "name": "Pattern Collections",
     "description": "Pattern-Based Collections for Blender",
     "author": "Martin Lorentzon",
-    "version": (1, 0, 2),
+    "version": (1, 0, 5),
     "blender": (4, 2, 0),
     "location": "Properties > Collection > Sorting Pattern",
     "doc_url": "https://github.com/martin-lorentzon/blender-pattern-collections",
@@ -116,18 +116,22 @@ classes = (
     # endregion
 )
 
+
 preview_collections = {}
 
 
 def register():
     import os
     import bpy.utils.previews
-    from bpy.app.handlers import persistent
-    
+
+    sorting_functions.sorting_timers.clear()
+
     pcoll = bpy.utils.previews.new()
     icons_dir = os.path.join(os.path.dirname(__file__), "icons")
-    pcoll.load("CASE_SENSITIVITY_ON", os.path.join(icons_dir, "case_sensitivity_on.png"), "IMAGE")
-    pcoll.load("CASE_SENSITIVITY_OFF", os.path.join(icons_dir, "case_sensitivity_off.png"), "IMAGE")
+    pcoll.load("CASE_SENSITIVITY_ON", os.path.join(
+        icons_dir, "case_sensitivity_on.png"), "IMAGE")
+    pcoll.load("CASE_SENSITIVITY_OFF", os.path.join(
+        icons_dir, "case_sensitivity_off.png"), "IMAGE")
     icons.preview_collections["main"] = pcoll
 
     for cls in classes:
@@ -136,13 +140,7 @@ def register():
     bpy.types.Collection.pattern_collection_properties = bpy.props.PointerProperty(
         type=properties.PatternCollectionPropertyGroup,
         name="Pattern"
-        )
-
-    @persistent
-    def load_handler(dummy):
-        sorting_functions.sorting_timers.clear()
-
-    bpy.app.handlers.load_post.append(load_handler)
+    )
 
 
 def unregister():

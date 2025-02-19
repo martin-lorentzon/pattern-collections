@@ -10,29 +10,29 @@ import json
 import webbrowser
 
 
-def sort_collection(collection):
+def sort_collection(context, collection):
     t0 = time.perf_counter()
-    sorting_commands = sorting_functions.sort_objects(collection, bpy.data.objects)
+    sorting_commands = sorting_functions.sort_objects(collection, context.scene.objects)
     sorting_functions.process_sorting_commands(sorting_commands)
     t1 = time.perf_counter()
     return t1 - t0
 
 
 class PATTERN_COLLECTIONS_OT_sort(Operator):
-    bl_idname = "collection.pattern_sort"
+    bl_idname = "scene.pattern_collection_sort"
     bl_label = "Sort Collection"
     bl_description = "Sort all objects for the active collection"
     bl_options = {"REGISTER", "UNDO"}
 
     def execute(self, context):
         collection = context.collection
-        delta_t = sort_collection(collection)
+        delta_t = sort_collection(context, collection)
         self.report({"INFO"}, f"Finished sorting in {delta_t:.4f} sec")
         return {"FINISHED"}
 
 
 class PATTERN_COLLECTIONS_OT_register_timer(Operator):
-    bl_idname = "collection.register_pattern_sort_timer"
+    bl_idname = "scene.pattern_collection_register_timer"
     bl_label = "Enable Automatic Sorting"
     bl_description = "Sort all objects for the active collection at regular intervals\n(WARNING: May cause Blender to momentarily freeze for larger scenes)"
 
@@ -47,12 +47,12 @@ class PATTERN_COLLECTIONS_OT_register_timer(Operator):
 
         if addon_prefs.safe_intervals:
             def timer_func(collection_name, interval_seconds):
-                delta_t = sort_collection(bpy.data.collections[collection_name])
+                delta_t = sort_collection(bpy.context, bpy.data.collections[collection_name])
                 print(f"Finished sorting in {delta_t:.4f} sec")
                 return max(interval_seconds, delta_t * 10)
         else:
             def timer_func(collection_name, interval_seconds):
-                delta_t = sort_collection(bpy.data.collections[collection_name])
+                delta_t = sort_collection(bpy.context, bpy.data.collections[collection_name])
                 print(f"Finished sorting in {delta_t:.4f} sec")
                 return (interval_seconds)
 
@@ -65,7 +65,7 @@ class PATTERN_COLLECTIONS_OT_register_timer(Operator):
 
 
 class PATTERN_COLLECTIONS_OT_unregister_timer(Operator):
-    bl_idname = "collection.unregister_pattern_sort_timer"
+    bl_idname = "scene.pattern_collection_unregister_timer"
     bl_label = "Disable Automatic Sorting"
     bl_description = "Sort all objects for the active collection at regular intervals\n(WARNING: May cause Blender to momentarily freeze for larger scenes)"
 
@@ -84,7 +84,7 @@ class PATTERN_COLLECTIONS_OT_unregister_timer(Operator):
 
 
 class PATTERN_COLLECTIONS_OT_export_pattern(Operator, ExportHelper):
-    bl_idname = "collection.export_pattern"
+    bl_idname = "scene.pattern_collection_export"
     bl_label = "Export Pattern"
     bl_description = "Export sorting pattern to a JSON file"
 
@@ -107,7 +107,7 @@ class PATTERN_COLLECTIONS_OT_export_pattern(Operator, ExportHelper):
             "included_collections", "excluded_collections",
             "included_uv_layers",   "excluded_uv_layers",
             "included_attributes",  "excluded_attributes"
-            ]
+        ]
 
         categories_data = dict()
 
@@ -118,7 +118,7 @@ class PATTERN_COLLECTIONS_OT_export_pattern(Operator, ExportHelper):
 
             for item in category:
                 item_data = {
-                    p.identifier: getattr(item, p.identifier) 
+                    p.identifier: getattr(item, p.identifier)
                     for p in item.bl_rna.properties if not p.is_readonly
                 }
                 categories_data[category_name].append(item_data)
@@ -129,7 +129,7 @@ class PATTERN_COLLECTIONS_OT_export_pattern(Operator, ExportHelper):
 
 
 class PATTERN_COLLECTIONS_OT_import_pattern(Operator, ImportHelper):
-    bl_idname = "collection.import_pattern"
+    bl_idname = "scene.pattern_collection_import"
     bl_label = "Import Pattern"
     bl_description = "Import sorting pattern from a JSON file"
     bl_options = {"REGISTER", "UNDO"}
@@ -139,7 +139,7 @@ class PATTERN_COLLECTIONS_OT_import_pattern(Operator, ImportHelper):
     def execute(self, context):
         collection = context.collection
         properties = collection.pattern_collection_properties
-        
+
         if not self.filepath.endswith(".json"):
             self.report({"WARNING"}, "Unsupported format")
             return {"CANCELLED"}
@@ -152,7 +152,7 @@ class PATTERN_COLLECTIONS_OT_import_pattern(Operator, ImportHelper):
             "included_collections", "excluded_collections",
             "included_uv_layers",   "excluded_uv_layers",
             "included_attributes",  "excluded_attributes"
-            ]
+        ]
 
         with open(bpy.path.abspath(self.filepath), "r") as data:
             categories_data = json.load(data)
@@ -191,7 +191,7 @@ class PATTERN_COLLECTIONS_OT_open_tracker(Operator):
     bl_label = "Feedback"
 
     def execute(self, context):
-        url = "https://github.com/martin-lorentzon/blender-pattern-collections/issues"
+        url = "https://github.com/martin-lorentzon/pattern-collections/issues"
         webbrowser.open(url)
         return {"FINISHED"}
 

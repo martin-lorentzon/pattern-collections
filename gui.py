@@ -11,6 +11,7 @@ class BaseItemUIList(bpy.types.UIList):
     """
     List Item UI for sorting categories that don't need anything special.
     """
+
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         pcoll = icons.preview_collections["main"]
 
@@ -39,6 +40,7 @@ class AttributeItemUIList(bpy.types.UIList):
     """
     List Item UI for attribute-sorting categories that make use of the additional 'value' and 'GREATER_THAN'/'LESS_THAN' properties.
     """
+
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         pcoll = icons.preview_collections["main"]
 
@@ -97,14 +99,14 @@ class PATTERN_COLLECTIONS_PT_pattern_collection(PatternCollectionsPanel):  # MAR
 
         row = layout.row(align=True)
         if collection.name not in sorting_functions.sorting_timers:
-            row.operator("collection.register_pattern_sort_timer", text="", icon="RADIOBUT_OFF")
+            row.operator("scene.pattern_collection_register_timer", text="", icon="RADIOBUT_OFF")
         else:
-            row.operator("collection.unregister_pattern_sort_timer", text="", icon="RADIOBUT_ON", depress=True)
-        row.operator("collection.pattern_sort")
+            row.operator("scene.pattern_collection_unregister_timer", text="", icon="RADIOBUT_ON", depress=True)
+        row.operator("scene.pattern_collection_sort")
 
         col = layout.column(align=True)
-        op = col.operator("collection.import_pattern", text="Import", icon="IMPORT")
-        op = col.operator("collection.export_pattern", text="Export", icon="EXPORT")
+        op = col.operator("scene.pattern_collection_import", text="Import", icon="IMPORT")
+        op = col.operator("scene.pattern_collection_export", text="Export", icon="EXPORT")
         base_filename = collection.name.lower() if addon_prefs.lowercase_filename else collection.name
         op.filepath = base_filename + addon_prefs.filename_suffix
 
@@ -144,7 +146,7 @@ class PATTERN_COLLECTIONS_PT_uilist(PatternCollectionsPanel):
             self.uilist_class, "",
             collection.pattern_collection_properties, self.category,
             collection.pattern_collection_properties, self.active_index
-            )
+        )
 
         match self.default_name:
             case "context_object":
@@ -161,18 +163,18 @@ class PATTERN_COLLECTIONS_PT_uilist(PatternCollectionsPanel):
         panel_list_operators = []
 
         col = row.column(align=True)
-        add_op = col.operator("list.add_item", icon="ADD", text="")
+        add_op = col.operator("wm.list_add_item", icon="ADD", text="")
         add_op.new_name = new_name
-        remove_op = col.operator("list.remove_item", icon="REMOVE", text="")
-        duplicate_op = col.operator("list.duplicate_item", icon="DUPLICATE", text="")
+        remove_op = col.operator("wm.list_remove_item", icon="REMOVE", text="")
+        duplicate_op = col.operator("wm.list_duplicate_item", icon="DUPLICATE", text="")
         panel_list_operators.extend([add_op, remove_op, duplicate_op])
 
         is_sortable = len(getattr(collection.pattern_collection_properties, self.category)) >= 2
         if is_sortable:
             col.separator()
-            up_op = col.operator("list.move_item", icon="TRIA_UP", text="")
+            up_op = col.operator("wm.list_move_item", icon="TRIA_UP", text="")
             up_op.direction = "UP"
-            down_op = col.operator("list.move_item", icon="TRIA_DOWN", text="")
+            down_op = col.operator("wm.list_move_item", icon="TRIA_DOWN", text="")
             down_op.direction = "DOWN"
             panel_list_operators.extend([up_op, down_op])
 

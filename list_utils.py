@@ -2,7 +2,6 @@
 Generic list operators.
 """
 
-import bpy
 from bpy.types import Operator
 from bpy.props import StringProperty, EnumProperty
 from bl_math import clamp
@@ -15,7 +14,7 @@ def get_property_group(context, domain: str, group: str):
 
 
 class LIST_OT_add_item(Operator):
-    bl_idname = "list.add_item"
+    bl_idname = "wm.list_add_item"
     bl_label = "Add Item"
     bl_description = "Add a new item"
     bl_options = {"REGISTER", "UNDO"}
@@ -40,7 +39,7 @@ class LIST_OT_add_item(Operator):
 
 
 class LIST_OT_remove_item(Operator):
-    bl_idname = "list.remove_item"
+    bl_idname = "wm.list_remove_item"
     bl_label = "Remove Item"
     bl_description = "Remove the active item"
     bl_options = {"REGISTER", "UNDO"}
@@ -70,7 +69,7 @@ class LIST_OT_remove_item(Operator):
 
 
 class LIST_OT_duplicate_item(Operator):
-    bl_idname = "list.duplicate_item"
+    bl_idname = "wm.list_duplicate_item"
     bl_label = "Duplicate Item"
     bl_description = "Duplicate the active item"
     bl_options = {"REGISTER", "UNDO"}
@@ -108,7 +107,7 @@ class LIST_OT_duplicate_item(Operator):
 
 
 class LIST_OT_move_item(Operator):
-    bl_idname = "list.move_item"
+    bl_idname = "wm.list_move_item"
     bl_label = "Move Item"
     bl_description = "Move the active item up/down in the list"
     bl_options = {"REGISTER", "UNDO"}
@@ -122,7 +121,7 @@ class LIST_OT_move_item(Operator):
     direction: EnumProperty(
         items=[("UP", "Up", ""),
                ("DOWN", "Down", "")]
-        )
+    )
 
     def execute(self, context):
         properties = get_property_group(context, self.domain, self.property_group)

@@ -20,8 +20,9 @@ Export and reuse your collection patterns for future projects
 ```py
 # Assumes you have an active collection
 
-bpy.ops.collection.import_pattern(filepath="")  # Reads the json file
-bpy.ops.collection.pattern_sort()  # Sorts the collection
+# Reads the json file
+bpy.ops.scene.pattern_collection_import(filepath="")
+bpy.ops.scene.pattern_collection_sort()  # Sorts the collection
 ```
 ## Available Sorting Categories
 * Included/Excluded **Names**
@@ -44,7 +45,7 @@ The extension has the potential of sorting 1K objects in less than one second. I
   * **triangles** (alt. tris) - The object's number of triangles (0 for non-meshes)
   * **bounding_box** (alt. bbox) - The object's bounding box volume (0 for non-meshes)
   * **surface_area** (alt. area) - The object's surface area (0 for non-meshes)
-    * (These can be mixed, e.g., use `tris/area` to sort by triangle density)
+    * (These can be mixed, e.g., use tris/area to sort by triangle density)
 
 ### Automatic Sorting
 Define your working structure *once* and let objects be categorised as you create
