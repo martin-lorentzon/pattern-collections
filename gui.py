@@ -5,6 +5,7 @@ This module defines the vast majority of the graphical user interface.
 import bpy
 from . import icons
 from . import sorting_functions
+import random
 
 
 class BaseItemUIList(bpy.types.UIList):
@@ -157,6 +158,8 @@ class PATTERN_COLLECTIONS_PT_uilist(PatternCollectionsPanel):
                 new_name = object.active_material.name if (object and object.active_material) else "Material"
             case "context_uv_layer":
                 new_name = object.data.uv_layer_clone.name if object and len(object.data.uv_layers) > 0 else "UVMap"
+            case "context_modifier":
+                new_name = random.choice(["GeometryNodes", "Subdivision", "Array", "Mirror", "Solidify", "Smooth by Angle"])
             case _:
                 new_name = self.default_name
 

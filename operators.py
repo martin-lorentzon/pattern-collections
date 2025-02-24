@@ -106,6 +106,7 @@ class PATTERN_COLLECTIONS_OT_export_pattern(Operator, ExportHelper):
             "included_materials",   "excluded_materials",
             "included_collections", "excluded_collections",
             "included_uv_layers",   "excluded_uv_layers",
+            "included_modifiers",   "excluded_modifiers",
             "included_attributes",  "excluded_attributes"
         ]
 
@@ -151,6 +152,7 @@ class PATTERN_COLLECTIONS_OT_import_pattern(Operator, ImportHelper):
             "included_materials",   "excluded_materials",
             "included_collections", "excluded_collections",
             "included_uv_layers",   "excluded_uv_layers",
+            "included_modifiers",   "excluded_modifiers",
             "included_attributes",  "excluded_attributes"
         ]
 

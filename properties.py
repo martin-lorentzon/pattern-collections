@@ -39,6 +39,11 @@ class PatternCollectionPropertyGroup(PropertyGroup):
     active_included_uv_layer_index: IntProperty(name="Active Included UV Layer Index", default=0)
     active_excluded_uv_layer_index: IntProperty(name="Active Excluded UV Layer Index", default=0)
 
+    included_modifiers: CollectionProperty(name="Included Modifiers", type=BaseItemPropertyGroup)
+    excluded_modifiers: CollectionProperty(name="Excluded Modifiers", type=BaseItemPropertyGroup)
+    active_included_modifier_index: IntProperty(name="Active Included Modifier Index", default=0)
+    active_excluded_modifier_index: IntProperty(name="Active Excluded Modifier Index", default=0)
+
     included_attributes: CollectionProperty(name="Included Attributes", type=AttributeItemPropertyGroup)
     excluded_attributes: CollectionProperty(name="Excluded Attributes", type=AttributeItemPropertyGroup)
     active_included_attribute_index: IntProperty(name="Active Included Attribute Index", default=0)

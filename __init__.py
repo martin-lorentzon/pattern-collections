@@ -2,7 +2,7 @@ bl_info = {
     "name": "Pattern Collections",
     "description": "Pattern-Based Collections for Blender",
     "author": "Martin Lorentzon",
-    "version": (1, 0, 5),
+    "version": (1, 1, 0),
     "blender": (4, 2, 0),
     "location": "Properties > Collection > Sorting Pattern",
     "doc_url": "https://github.com/martin-lorentzon/blender-pattern-collections",
@@ -30,6 +30,7 @@ if "bpy" in locals():
     reload(material_sort)
     reload(collection_sort)
     reload(uv_layer_sort)
+    reload(modifier_sort)
     reload(attribute_sort)
 else:
     import bpy
@@ -50,6 +51,7 @@ else:
         material_sort,
         collection_sort,
         uv_layer_sort,
+        modifier_sort,
         attribute_sort,
     )
 
@@ -108,6 +110,11 @@ classes = (
     uv_layer_sort.PATTERN_COLLECTIONS_UL_excluded_uv_layers,
     uv_layer_sort.PATTERN_COLLECTIONS_PT_included_uv_layers,
     uv_layer_sort.PATTERN_COLLECTIONS_PT_excluded_uv_layers,
+
+    modifier_sort.PATTERN_COLLECTIONS_UL_included_modifiers,
+    modifier_sort.PATTERN_COLLECTIONS_UL_excluded_modifiers,
+    modifier_sort.PATTERN_COLLECTIONS_PT_included_modifiers,
+    modifier_sort.PATTERN_COLLECTIONS_PT_excluded_modifiers,
 
     attribute_sort.PATTERN_COLLECTIONS_UL_included_attributes,
     attribute_sort.PATTERN_COLLECTIONS_UL_excluded_attributes,

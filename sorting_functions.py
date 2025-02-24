@@ -140,6 +140,10 @@ def sort_objects(collection, objects: list[bpy.types.Object]) -> list[Tuple[bpy.
         candidates = [uv_layer.name for uv_layer in getattr(ob.data, "uv_layers", [])]
         uv_layers_green = test_category(properties, "included_uv_layers", candidates) and \
                           test_category(properties, "excluded_uv_layers", candidates)
+        
+        candidates = [mod.name for mod in getattr(ob, "modifiers", [])]
+        modifiers_green = test_category(properties, "included_modifiers", candidates) and \
+                          test_category(properties, "excluded_modifiers", candidates)
 
         candidates = {attribute: value for attribute, value in ob.items()}
         attributes_green = test_category_attribute(properties, "included_attributes", candidates, ob) and \
@@ -151,6 +155,7 @@ def sort_objects(collection, objects: list[bpy.types.Object]) -> list[Tuple[bpy.
                 materials_green and \
                 collections_green and \
                 uv_layers_green and \
+                modifiers_green and \
                 attributes_green
 
         already_in_collection = ob.name in collection.objects

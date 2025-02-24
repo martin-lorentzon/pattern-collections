@@ -31,6 +31,7 @@ bpy.ops.scene.pattern_collection_sort()  # Sorts the collection
 * Included/Excluded **Materials**
 * Included/Excluded **Collections**
 * Included/Excluded **UV Layers**
+* Included/Excluded **Modifiers**
 * Included/Excluded **Attributes**
 
 ## Optimisation
